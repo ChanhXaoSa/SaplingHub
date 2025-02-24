@@ -35,7 +35,7 @@ namespace UI.Middleware
                         Status = (int)statusCode,
                         Detail = badRequestException.InnerException?.Message,
                         Type = nameof(BadRequestException),
-                        Errors = badRequestException.ValidationErrors
+                        Errors = badRequestException.ValidationErrors ?? new Dictionary<string, string[]>()
                     };
 
                     break;

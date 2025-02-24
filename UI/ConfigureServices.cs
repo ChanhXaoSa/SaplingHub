@@ -2,6 +2,14 @@
 using Microsoft.OpenApi.Models;
 using SH_BusinessObjects.Common.Interface;
 using SH_BusinessObjects.Services;
+using SH_DataAccessObjects.Context;
+using SH_DataAccessObjects.Context.Interceptor;
+using SH_DataAccessObjects.DAO;
+using SH_DataAccessObjects.DAO.Interfaces;
+using SH_Repositories.Repos;
+using SH_Repositories.Repos.Interfaces;
+using SH_Services.Services;
+using SH_Services.Services.Interfaces;
 
 namespace UI
 {
@@ -10,6 +18,14 @@ namespace UI
         public static IServiceCollection AddAPIServices(this IServiceCollection services)
         {
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddScoped<IApplicationDbContext, SaplingHubContext>();
+
+            services.AddScoped<ISaplingDAO, SaplingDAO>();
+
+            services.AddScoped<ISaplingRepository, SaplingRepository>();
+
+            services.AddScoped<ISaplingService, SaplingService>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 

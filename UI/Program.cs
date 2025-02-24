@@ -4,32 +4,28 @@ using Microsoft.EntityFrameworkCore;
 using SH_BusinessObjects.Identity;
 using SH_DataAccessObjects;
 using SH_DataAccessObjects.Context;
+using System.Text.Json.Serialization;
+using UI;
+using UI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDataAccessObjectServices(builder.Configuration);
-builder.Services.AddControllers();
+builder.Services.AddAPIServices();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<SaplingHubContext>()
-    .AddDefaultTokenProviders();
 
 builder.Services.Configure<OperationalStoreOptions>(options =>
 {
     options.EnableTokenCleanup = true;
     options.TokenCleanupInterval = 3600;
 });
-
-builder.Services.AddDbContext<SaplingHubContext>(opstions =>
-opstions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, SaplingHubContext>();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -67,7 +63,7 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseMiddleware<Exception>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 
