@@ -1,40 +1,44 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SH_BusinessObjects.Common.Model.Sapling;
-using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Common.Model.Category;
 using SH_Services.Services.Interfaces;
 
 namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaplingController(ISaplingService saplingService) : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ISaplingService _saplingService = saplingService;
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var saplings = await _saplingService.GetAllAsync();
-            return Ok(saplings);
+            var categorys = await _categoryService.GetAllAsync();
+            return Ok(categorys);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var sapling = await _saplingService.GetByIdAsync(id);
-            if (sapling == null)
+            var category = await _categoryService.GetByIdAsync(id);
+            if (category == null)
                 return NotFound();
-            return Ok(sapling);
+            return Ok(category);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Create([FromBody] CategoryModel category)
         {
             try
             {
-                var createdSapling = await _saplingService.CreateAsync(sapling);
-                return CreatedAtAction(nameof(GetById), new { id = createdSapling.Id }, createdSapling);
+                var createdCategory = await _categoryService.CreateAsync(category);
+                return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
             }
             catch (ArgumentException ex)
             {
@@ -43,11 +47,11 @@ namespace UI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Update(Guid id, [FromBody] CategoryModel category)
         {
             try
             {
-                await _saplingService.UpdateAsync(id, sapling);
+                await _categoryService.UpdateAsync(id, category);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -61,7 +65,7 @@ namespace UI.Controllers
         {
             try
             {
-                await _saplingService.DeleteAsync(id);
+                await _categoryService.DeleteAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)

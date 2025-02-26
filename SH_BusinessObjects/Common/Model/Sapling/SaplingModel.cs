@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace SH_BusinessObjects.Common.Model.Sapling
 {
-    public class AddSaplingModel
+    public class SaplingModel
     {
-        public Guid Id { get; set; }
-
         public required string Name { get; set; }
 
         public string? Description { get; set; }

@@ -11,14 +11,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class SaplingRepository : ISaplingRepository
+    public class SaplingRepository(ISaplingDAO saplingDAO) : ISaplingRepository
     {
-        private readonly ISaplingDAO _saplingDAO;
-
-        public SaplingRepository(ISaplingDAO saplingDAO)
-        {
-            _saplingDAO = saplingDAO;
-        }
+        private readonly ISaplingDAO _saplingDAO = saplingDAO;
 
         public async Task<List<Sapling>> GetAllAsync()
         {
@@ -30,7 +25,7 @@ namespace SH_Repositories.Repos
             return await _saplingDAO.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(AddSaplingModel sapling)
+        public async Task AddAsync(Sapling sapling)
         {
             await _saplingDAO.AddAsync(sapling);
         }

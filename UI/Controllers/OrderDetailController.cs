@@ -1,40 +1,44 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SH_BusinessObjects.Common.Model.Sapling;
-using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Common.Model.OrderDetail;
 using SH_Services.Services.Interfaces;
 
 namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaplingController(ISaplingService saplingService) : ControllerBase
+    public class OrderDetailController : ControllerBase
     {
-        private readonly ISaplingService _saplingService = saplingService;
+        private readonly IOrderDetailService _orderDetailService;
+
+        public OrderDetailController(IOrderDetailService orderDetailService)
+        {
+            _orderDetailService = orderDetailService;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var saplings = await _saplingService.GetAllAsync();
-            return Ok(saplings);
+            var orderDetails = await _orderDetailService.GetAllAsync();
+            return Ok(orderDetails);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var sapling = await _saplingService.GetByIdAsync(id);
-            if (sapling == null)
+            var orderDetail = await _orderDetailService.GetByIdAsync(id);
+            if (orderDetail == null)
                 return NotFound();
-            return Ok(sapling);
+            return Ok(orderDetail);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Create([FromBody] OrderDetailModel orderDetail)
         {
             try
             {
-                var createdSapling = await _saplingService.CreateAsync(sapling);
-                return CreatedAtAction(nameof(GetById), new { id = createdSapling.Id }, createdSapling);
+                var createdOrderDetail = await _orderDetailService.CreateAsync(orderDetail);
+                return CreatedAtAction(nameof(GetById), new { id = createdOrderDetail.Id }, createdOrderDetail);
             }
             catch (ArgumentException ex)
             {
@@ -43,11 +47,11 @@ namespace UI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Update(Guid id, [FromBody] OrderDetailModel orderDetail)
         {
             try
             {
-                await _saplingService.UpdateAsync(id, sapling);
+                await _orderDetailService.UpdateAsync(id, orderDetail);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -61,7 +65,7 @@ namespace UI.Controllers
         {
             try
             {
-                await _saplingService.DeleteAsync(id);
+                await _orderDetailService.DeleteAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)

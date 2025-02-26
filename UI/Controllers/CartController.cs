@@ -1,40 +1,39 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SH_BusinessObjects.Common.Model.Sapling;
-using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Common.Model.Cart;
 using SH_Services.Services.Interfaces;
 
 namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaplingController(ISaplingService saplingService) : ControllerBase
+    public class CartController(ICartService cartService) : ControllerBase
     {
-        private readonly ISaplingService _saplingService = saplingService;
+        private readonly ICartService _cartService = cartService;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var saplings = await _saplingService.GetAllAsync();
-            return Ok(saplings);
+            var carts = await _cartService.GetAllAsync();
+            return Ok(carts);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var sapling = await _saplingService.GetByIdAsync(id);
-            if (sapling == null)
+            var cart = await _cartService.GetByIdAsync(id);
+            if (cart == null)
                 return NotFound();
-            return Ok(sapling);
+            return Ok(cart);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Create([FromBody] CartModel cart)
         {
             try
             {
-                var createdSapling = await _saplingService.CreateAsync(sapling);
-                return CreatedAtAction(nameof(GetById), new { id = createdSapling.Id }, createdSapling);
+                var createdCart = await _cartService.CreateAsync(cart);
+                return CreatedAtAction(nameof(GetById), new { id = createdCart.Id }, createdCart);
             }
             catch (ArgumentException ex)
             {
@@ -43,11 +42,11 @@ namespace UI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Update(Guid id, [FromBody] CartModel cart)
         {
             try
             {
-                await _saplingService.UpdateAsync(id, sapling);
+                await _cartService.UpdateAsync(id, cart);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -61,7 +60,7 @@ namespace UI.Controllers
         {
             try
             {
-                await _saplingService.DeleteAsync(id);
+                await _cartService.DeleteAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)

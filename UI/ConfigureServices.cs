@@ -22,10 +22,25 @@ namespace UI
             services.AddScoped<IApplicationDbContext, SaplingHubContext>();
 
             services.AddScoped<ISaplingDAO, SaplingDAO>();
+            services.AddScoped<ICartDAO, CartDAO>();
+            services.AddScoped<ICategoryDAO, CategoryDAO>();
+            services.AddScoped<IOrderDAO, OrderDAO>();
+            services.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
+            services.AddScoped<IPaymentDAO, PaymentDAO>();
 
             services.AddScoped<ISaplingRepository, SaplingRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddScoped<ISaplingService, SaplingService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 

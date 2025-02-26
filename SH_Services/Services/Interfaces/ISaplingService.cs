@@ -12,8 +12,8 @@ namespace SH_Services.Services.Interfaces
     {
         Task<List<Sapling>> GetAllAsync();
         Task<Sapling?> GetByIdAsync(Guid id);
-        Task CreateAsync(AddSaplingModel sapling);
-        Task UpdateAsync(Guid id, Sapling sapling);
+        Task<Sapling> CreateAsync(SaplingModel sapling);
+        Task UpdateAsync(Guid id, SaplingModel sapling);
         Task DeleteAsync(Guid id);
     }
 }

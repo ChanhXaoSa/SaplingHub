@@ -1,40 +1,44 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SH_BusinessObjects.Common.Model.Sapling;
-using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Common.Model.Payment;
 using SH_Services.Services.Interfaces;
 
 namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaplingController(ISaplingService saplingService) : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly ISaplingService _saplingService = saplingService;
+        private readonly IPaymentService _paymentService;
+
+        public PaymentController(IPaymentService paymentService)
+        {
+            _paymentService = paymentService;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var saplings = await _saplingService.GetAllAsync();
-            return Ok(saplings);
+            var payments = await _paymentService.GetAllAsync();
+            return Ok(payments);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var sapling = await _saplingService.GetByIdAsync(id);
-            if (sapling == null)
+            var payment = await _paymentService.GetByIdAsync(id);
+            if (payment == null)
                 return NotFound();
-            return Ok(sapling);
+            return Ok(payment);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Create([FromBody] PaymentModel payment)
         {
             try
             {
-                var createdSapling = await _saplingService.CreateAsync(sapling);
-                return CreatedAtAction(nameof(GetById), new { id = createdSapling.Id }, createdSapling);
+                var createdPayment = await _paymentService.CreateAsync(payment);
+                return CreatedAtAction(nameof(GetById), new { id = createdPayment.Id }, createdPayment);
             }
             catch (ArgumentException ex)
             {
@@ -43,11 +47,11 @@ namespace UI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] SaplingModel sapling)
+        public async Task<IActionResult> Update(Guid id, [FromBody] PaymentModel payment)
         {
             try
             {
-                await _saplingService.UpdateAsync(id, sapling);
+                await _paymentService.UpdateAsync(id, payment);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -61,7 +65,7 @@ namespace UI.Controllers
         {
             try
             {
-                await _saplingService.DeleteAsync(id);
+                await _paymentService.DeleteAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)

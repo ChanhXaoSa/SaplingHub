@@ -12,14 +12,9 @@ using System.Threading.Tasks;
 
 namespace SH_DataAccessObjects.DAO
 {
-    public class SaplingDAO : ISaplingDAO
+    public class SaplingDAO(IApplicationDbContext context) : ISaplingDAO
     {
-        private readonly IApplicationDbContext _context;
-
-        public SaplingDAO(IApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly IApplicationDbContext _context = context;
 
         public async Task<List<Sapling>> GetAllAsync()
         {
@@ -31,18 +26,9 @@ namespace SH_DataAccessObjects.DAO
             return await _context.Get<Sapling>().Include(s => s.Category).FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task AddAsync(AddSaplingModel sapling)
+        public async Task AddAsync(Sapling sapling)
         {
-            Sapling item = new Sapling()
-            {
-                Id = new Guid(),
-                Name = sapling.Name,
-                Price = sapling.Price,
-                StockQuantity = sapling.StockQuantity,
-                CategoryId = sapling.CategoryId,
-                ImageUrl = sapling.ImageUrl,
-            };
-            await _context.Get<Sapling>().AddAsync(item);
+            await _context.Get<Sapling>().AddAsync(sapling);
             await _context.SaveChangesAsync(CancellationToken.None);
         }
 
@@ -57,7 +43,9 @@ namespace SH_DataAccessObjects.DAO
             var sapling = await GetByIdAsync(id);
             if (sapling != null)
             {
-                _context.Get<Sapling>().Remove(sapling);
+                sapling.IsDeleted = true;
+                _context.Get<Sapling>().Update(sapling);
+                //_context.Get<Sapling>().Remove(sapling);
                 await _context.SaveChangesAsync(CancellationToken.None);
             }
         }

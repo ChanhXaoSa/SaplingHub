@@ -12,7 +12,7 @@ namespace SH_Repositories.Repos.Interfaces
     {
         Task<List<Sapling>> GetAllAsync();
         Task<Sapling?> GetByIdAsync(Guid id);
-        Task AddAsync(AddSaplingModel sapling);
+        Task AddAsync(Sapling sapling);
         Task UpdateAsync(Sapling sapling);
         Task DeleteAsync(Guid id);
     }
