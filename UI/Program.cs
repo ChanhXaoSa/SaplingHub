@@ -55,12 +55,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    using (var scope = app.Services.CreateScope())
-    {
-        var initialiser = scope.ServiceProvider.GetRequiredService<SaplingHubContextInitialiser>();
-        await initialiser.InitialiseAsync();
-        await initialiser.SeedAsync();
-    }
+    using var scope = app.Services.CreateScope();
+    var initialiser = scope.ServiceProvider.GetRequiredService<SaplingHubContextInitialiser>();
+    await initialiser.InitialiseAsync();
+    await initialiser.SeedAsync();
 }
 
 app.UseMiddleware<ExceptionMiddleware>();

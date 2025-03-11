@@ -48,7 +48,7 @@ namespace SH_DataAccessObjects.Context
     public class MockMediator : IMediator
     {
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
-            => Task.FromResult(default(TResponse));
+            => Task.FromResult<TResponse>(default!);
 
         public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
             => Task.CompletedTask;
@@ -58,11 +58,12 @@ namespace SH_DataAccessObjects.Context
 
         public Task Publish(object notification, CancellationToken cancellationToken = default)
             => Task.CompletedTask;
+
         public Task<object?> Send(object request, CancellationToken cancellationToken = default)
-            => Task.FromResult<object?>(null); // Trả về null vì đây là mock
+            => Task.FromResult<object?>(null);
 
         public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
-            => AsyncEnumerable.Empty<TResponse>(); // Trả về một luồng rỗng
+            => AsyncEnumerable.Empty<TResponse>();
 
         public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
             => AsyncEnumerable.Empty<object?>();
@@ -96,9 +97,9 @@ static class AsyncEnumerable
 
     private class EmptyAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
-        public T Current => default;
+        public T Current => default!;
 
-        public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(false);
+        public ValueTask<bool> MoveNextAsync() => new(false);
 
         public ValueTask DisposeAsync() => default;
     }
