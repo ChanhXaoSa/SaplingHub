@@ -27,6 +27,9 @@ namespace UI
             services.AddScoped<IOrderDAO, OrderDAO>();
             services.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
             services.AddScoped<IPaymentDAO, PaymentDAO>();
+            services.AddScoped<IUserAccountDAO, UserAccountDAO>();
+            services.AddScoped<IAdminAccountDAO, AdminAccountDAO>();
+            services.AddScoped<IAccountDAO, AccountDAO>();
 
             services.AddScoped<ISaplingRepository, SaplingRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
@@ -34,6 +37,9 @@ namespace UI
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+            services.AddScoped<IAdminAccountRepository, AdminAccountRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             services.AddScoped<ISaplingService, SaplingService>();
             services.AddScoped<ICartService, CartService>();
@@ -41,6 +47,9 @@ namespace UI
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IUserAccountService, UserAccountService>();
+            services.AddScoped<IAdminAccountService, AdminAccountService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -52,7 +61,7 @@ namespace UI
 
             services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Art Work Sharing API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Sapling Hub API", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

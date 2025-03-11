@@ -7,14 +7,9 @@ namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentController : ControllerBase
+    public class PaymentController(IPaymentService paymentService) : ControllerBase
     {
-        private readonly IPaymentService _paymentService;
-
-        public PaymentController(IPaymentService paymentService)
-        {
-            _paymentService = paymentService;
-        }
+        private readonly IPaymentService _paymentService = paymentService;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

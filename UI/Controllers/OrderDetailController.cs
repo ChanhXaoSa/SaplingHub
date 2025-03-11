@@ -7,14 +7,9 @@ namespace UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderDetailController : ControllerBase
+    public class OrderDetailController(IOrderDetailService orderDetailService) : ControllerBase
     {
-        private readonly IOrderDetailService _orderDetailService;
-
-        public OrderDetailController(IOrderDetailService orderDetailService)
-        {
-            _orderDetailService = orderDetailService;
-        }
+        private readonly IOrderDetailService _orderDetailService = orderDetailService;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
