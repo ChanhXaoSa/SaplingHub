@@ -34,7 +34,7 @@ namespace UI.Controllers
             return BadRequest("Invalid email or password");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {

@@ -1,5 +1,4 @@
 ﻿using Duende.IdentityServer.EntityFramework.Options;
-using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +20,8 @@ namespace SH_DataAccessObjects.Context
     public class SaplingHubContext(
         DbContextOptions<SaplingHubContext> options,
         IOptions<OperationalStoreOptions> operationalStoreOptions,
-        IMediator mediator,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : ApiAuthorizationDbContext<ApplicationUser>(options, operationalStoreOptions), IApplicationDbContext
     {
-        private readonly IMediator _mediator = mediator;
         private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
 
         public DbSet<Sapling> Saplings => Set<Sapling>();
@@ -53,15 +50,11 @@ namespace SH_DataAccessObjects.Context
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _mediator.DispatchDomainEvents(this);
-
             return await base.SaveChangesAsync(cancellationToken);
         }
 
         public new void SaveChanges()
         {
-            _ = _mediator.DispatchDomainEvents(this);
-
             base.SaveChanges();
         }
 

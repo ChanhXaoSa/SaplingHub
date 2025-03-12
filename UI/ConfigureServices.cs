@@ -67,9 +67,9 @@ namespace UI
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
 
-            services.AddAuthentication(opts => opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Bearer", opts =>
+            services.AddAuthentication(options => options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Bearer", options =>
             {
-                opts.TokenValidationParameters = new TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = jwtIssuer,
@@ -81,10 +81,10 @@ namespace UI
                 };
             });
 
-            services.AddSwaggerGen(option =>
+            services.AddSwaggerGen(options =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Sapling Hub API", Version = "v1" });
-                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Sapling Hub API", Version = "v1" });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer YOUR_TOKEN')",
@@ -93,7 +93,7 @@ namespace UI
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
-                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme

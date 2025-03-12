@@ -9,7 +9,6 @@ using SH_BusinessObjects.Common.Interface;
 using SH_BusinessObjects.Identity;
 using SH_BusinessObjects.Identity.Interface;
 using SH_BusinessObjects.Services;
-using SH_DataAccessObjects.Common.Behaviours;
 using SH_DataAccessObjects.Context;
 using SH_DataAccessObjects.Context.Interceptor;
 using System;
@@ -52,15 +51,6 @@ namespace SH_DataAccessObjects
             services.AddSingleton(mapperConfig.CreateMapper());
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(cfg =>
-            {
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-
-            });
 
             return services;
         }

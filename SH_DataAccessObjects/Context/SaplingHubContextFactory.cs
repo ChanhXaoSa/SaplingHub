@@ -18,10 +18,9 @@ namespace SH_DataAccessObjects.Context
     {
         public SaplingHubContext CreateDbContext(string[] args)
         {
-            // Tạo configuration để đọc chuỗi kết nối từ appsettings.json
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../UI")) // Thư mục SH_DataAccessObjects
-                .AddJsonFile("appsettings.json", optional: true) // optional nếu file ở SH_UI
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../UI"))
+                .AddJsonFile("appsettings.json", optional: true)
                 .Build();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection")
@@ -31,7 +30,6 @@ namespace SH_DataAccessObjects.Context
             optionsBuilder.UseSqlServer(connectionString);
 
             // Tạo các dependency
-            var mediator = new MockMediator();
             var currentUserService = new MockCurrentUserService();
             var dateTime = new MockDateTime();
             var interceptor = new AuditableEntitySaveChangesInterceptor(currentUserService, dateTime);
@@ -40,7 +38,6 @@ namespace SH_DataAccessObjects.Context
             return new SaplingHubContext(
                 optionsBuilder.Options,
                 operationalStoreOptions,
-                mediator,
                 interceptor
             );
         }
