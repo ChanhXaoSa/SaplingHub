@@ -26,6 +26,7 @@ namespace SH_DataAccessObjects
         public static IServiceCollection AddDataAccessObjectServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
             services.AddDbContext<SaplingHubContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     builder => builder.MigrationsAssembly(typeof(SaplingHubContext).Assembly.FullName)));

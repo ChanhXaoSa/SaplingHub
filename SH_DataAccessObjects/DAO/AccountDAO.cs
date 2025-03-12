@@ -72,35 +72,20 @@ namespace SH_DataAccessObjects.DAO
             {
                 authClaim.Add(new Claim(ClaimTypes.Role, role));
             }
-            AccountModel accountModel = new();
-            foreach (var role in userRole)
+            AccountModel accountModel = new()
             {
-                if (role == "Admin")
-                {
-                    accountModel = new AccountModel
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        UserName = user.UserName,
-                        IsAdmin = true,
-                        IsUser = false,
-                    };
-                }
-                else
-                {
-                    accountModel = new AccountModel
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        UserName = user.UserName,
-                        IsAdmin = false,
-                        IsUser = true,
-                    };
-                }
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                IsAdmin = userRole.Contains("Admin"),
+                IsUser = userRole.Contains("User") || !userRole.Contains("Admin")
             };
             IdentityModelEventSource.ShowPII = true;
 
-            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]!));
+            var key = _configuration["JWT:Key"] ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
+            if (key.Length < 16) throw new InvalidOperationException("JWT Key must be at least 16 characters long.");
+            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:Issuer"],
                 audience: _configuration["JWT:Audience"],

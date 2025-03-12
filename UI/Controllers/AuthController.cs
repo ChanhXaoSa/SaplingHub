@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SH_BusinessObjects.Common.Model.Account;
 using SH_Services.Services.Interfaces;
@@ -33,6 +34,7 @@ namespace UI.Controllers
             return BadRequest("Invalid email or password");
         }
 
+        [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {

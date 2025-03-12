@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDataAccessObjectServices(builder.Configuration);
-builder.Services.AddAPIServices();
+builder.Services.AddAPIServices(builder.Configuration);
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
         {
@@ -54,22 +54,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    using var scope = app.Services.CreateScope();
-    var initialiser = scope.ServiceProvider.GetRequiredService<SaplingHubContextInitialiser>();
-    await initialiser.InitialiseAsync();
-    await initialiser.SeedAsync();
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 
+app.UseAuthorization();
+
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
