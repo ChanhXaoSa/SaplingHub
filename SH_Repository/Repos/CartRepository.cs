@@ -1,5 +1,5 @@
 ﻿using SH_BusinessObjects.Entities;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class CartRepository(ICartDAO cartDAO) : ICartRepository
+    public class CartRepository(CartDAO cartDAO) : ICartRepository
     {
-        private readonly ICartDAO _cartDAO = cartDAO;
+        private readonly CartDAO _cartDAO = cartDAO;
 
         public async Task<List<Cart>> GetAllAsync()
         {

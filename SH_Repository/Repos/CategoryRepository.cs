@@ -1,5 +1,5 @@
 ﻿using SH_BusinessObjects.Entities;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class CategoryRepository(ICategoryDAO categoryDAO) : ICategoryRepository
+    public class CategoryRepository(CategoryDAO categoryDAO) : ICategoryRepository
     {
-        private readonly ICategoryDAO _categoryDAO = categoryDAO;
+        private readonly CategoryDAO _categoryDAO = categoryDAO;
 
         public async Task<List<Category>> GetAllAsync()
         {

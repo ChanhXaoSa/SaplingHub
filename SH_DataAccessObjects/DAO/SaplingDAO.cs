@@ -3,7 +3,6 @@ using SH_BusinessObjects.Common.Interface;
 using SH_BusinessObjects.Common.Model.Sapling;
 using SH_BusinessObjects.Entities;
 using SH_DataAccessObjects.Context;
-using SH_DataAccessObjects.DAO.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SH_DataAccessObjects.DAO
 {
-    public class SaplingDAO(IApplicationDbContext context) : ISaplingDAO
+    public class SaplingDAO(IApplicationDbContext context)
     {
         private readonly IApplicationDbContext _context = context;
 

@@ -1,5 +1,5 @@
 ﻿using SH_BusinessObjects.Entities;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class UserAccountRepository(IUserAccountDAO userAccountDAO) : IUserAccountRepository
+    public class UserAccountRepository(UserAccountDAO userAccountDAO) : IUserAccountRepository
     {
-        private readonly IUserAccountDAO _userAccountDAO = userAccountDAO;
+        private readonly UserAccountDAO _userAccountDAO = userAccountDAO;
 
         public async Task AddAsync(UserAccount userAccount)
         {

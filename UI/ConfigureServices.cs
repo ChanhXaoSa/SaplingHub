@@ -9,7 +9,6 @@ using SH_BusinessObjects.Services;
 using SH_DataAccessObjects.Context;
 using SH_DataAccessObjects.Context.Interceptor;
 using SH_DataAccessObjects.DAO;
-using SH_DataAccessObjects.DAO.Interfaces;
 using SH_Repositories.Repos;
 using SH_Repositories.Repos.Interfaces;
 using SH_Services.Services;
@@ -30,15 +29,15 @@ namespace UI
 
             services.AddScoped<IApplicationDbContext, SaplingHubContext>();
 
-            services.AddScoped<ISaplingDAO, SaplingDAO>();
-            services.AddScoped<ICartDAO, CartDAO>();
-            services.AddScoped<ICategoryDAO, CategoryDAO>();
-            services.AddScoped<IOrderDAO, OrderDAO>();
-            services.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
-            services.AddScoped<IPaymentDAO, PaymentDAO>();
-            services.AddScoped<IUserAccountDAO, UserAccountDAO>();
-            services.AddScoped<IAdminAccountDAO, AdminAccountDAO>();
-            services.AddScoped<IAccountDAO, AccountDAO>();
+            services.AddScoped<SaplingDAO>();
+            services.AddScoped<CartDAO>();
+            services.AddScoped<CategoryDAO>();
+            services.AddScoped<OrderDAO>();
+            services.AddScoped<OrderDetailDAO>();
+            services.AddScoped<PaymentDAO>();
+            services.AddScoped<UserAccountDAO>();
+            services.AddScoped<AdminAccountDAO>();
+            services.AddScoped<AccountDAO>();
 
             services.AddScoped<ISaplingRepository, SaplingRepository>();
             services.AddScoped<ICartRepository, CartRepository>();

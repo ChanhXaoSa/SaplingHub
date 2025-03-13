@@ -1,5 +1,5 @@
 ﻿using SH_BusinessObjects.Entities;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class OrderRepository(IOrderDAO orderDAO) : IOrderRepository
+    public class OrderRepository(OrderDAO orderDAO) : IOrderRepository
     {
-        private readonly IOrderDAO _orderDAO = orderDAO;
+        private readonly OrderDAO _orderDAO = orderDAO;
 
         public async Task<List<Order>> GetAllAsync()
         {

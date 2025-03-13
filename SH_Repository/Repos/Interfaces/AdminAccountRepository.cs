@@ -1,5 +1,5 @@
 ﻿using SH_BusinessObjects.Entities;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos.Interfaces
 {
-    public class AdminAccountRepository(IAdminAccountDAO adminAccountDAO) : IAdminAccountRepository
+    public class AdminAccountRepository(AdminAccountDAO adminAccountDAO) : IAdminAccountRepository
     {
-        private readonly IAdminAccountDAO _adminAccountDAO = adminAccountDAO;
+        private readonly AdminAccountDAO _adminAccountDAO = adminAccountDAO;
 
         public async Task AddAsync(AdminAccount adminAccount)
         {

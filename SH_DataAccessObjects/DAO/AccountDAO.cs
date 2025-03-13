@@ -13,13 +13,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using SH_DataAccessObjects.DAO.Interfaces;
 
 namespace SH_DataAccessObjects.DAO
 {
     public class AccountDAO(IIdentityService identityService, IConfiguration configuration, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager,
         //SignInManager<ApplicationUser> signInManager, 
-        IApplicationDbContext context) : IAccountDAO
+        IApplicationDbContext context)
     {
         private readonly IIdentityService _identityService = identityService;
         private readonly IConfiguration _configuration = configuration;

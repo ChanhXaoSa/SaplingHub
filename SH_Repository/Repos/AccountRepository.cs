@@ -8,7 +8,7 @@ using SH_BusinessObjects.Common.Model.Account;
 using SH_BusinessObjects.Enum;
 using SH_BusinessObjects.Identity;
 using SH_BusinessObjects.Identity.Interface;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class AccountRepository(IAccountDAO accountDAO) : IAccountRepository
+    public class AccountRepository(AccountDAO accountDAO) : IAccountRepository
     {
-        private readonly IAccountDAO _accountDAO = accountDAO;
+        private readonly AccountDAO _accountDAO = accountDAO;
 
         public async Task<ApplicationUser> GetAccountByIdAsync(string id)
         {

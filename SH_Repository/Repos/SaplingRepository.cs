@@ -1,7 +1,7 @@
 ﻿using SH_BusinessObjects.Common.Model.Sapling;
 using SH_BusinessObjects.Entities;
 using SH_DataAccessObjects.Context;
-using SH_DataAccessObjects.DAO.Interfaces;
+using SH_DataAccessObjects.DAO;
 using SH_Repositories.Repos.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace SH_Repositories.Repos
 {
-    public class SaplingRepository(ISaplingDAO saplingDAO) : ISaplingRepository
+    public class SaplingRepository(SaplingDAO saplingDAO) : ISaplingRepository
     {
-        private readonly ISaplingDAO _saplingDAO = saplingDAO;
+        private readonly SaplingDAO _saplingDAO = saplingDAO;
 
         public async Task<List<Sapling>> GetAllAsync()
         {
