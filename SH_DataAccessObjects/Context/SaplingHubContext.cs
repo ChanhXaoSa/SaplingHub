@@ -37,8 +37,6 @@ namespace SH_DataAccessObjects.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            //seeding
-
 
             base.OnModelCreating(builder);
         }

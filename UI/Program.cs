@@ -61,13 +61,6 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.Use(async (context, next) =>
-{
-    Console.WriteLine($"Before: {context.Request.Path}");
-    await next();
-    Console.WriteLine($"After: {context.Request.Path}");
-});
-
 app.UseAuthentication();
 
 app.UseAuthorization();
