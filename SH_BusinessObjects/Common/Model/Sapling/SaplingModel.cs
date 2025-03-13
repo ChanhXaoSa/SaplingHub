@@ -23,8 +23,15 @@ namespace SH_BusinessObjects.Common.Model.Sapling
         [Range(0, int.MaxValue, ErrorMessage = "Stock quantity must be greater than 0")]
         public int StockQuantity { get; set; }
 
+        [Required(ErrorMessage = "CategoryId required")]
         public Guid CategoryId { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        public void Validate()
+        {
+            if (CategoryId == Guid.Empty)
+                throw new ArgumentException("CategoryId cannot be empty.");
+        }
     }
 }
