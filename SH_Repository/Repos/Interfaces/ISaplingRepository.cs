@@ -15,5 +15,7 @@ namespace SH_Repositories.Repos.Interfaces
         Task AddAsync(Sapling sapling);
         Task UpdateAsync(Sapling sapling);
         Task DeleteAsync(Guid id);
+        Task<List<Sapling>> GetByCategoryIdAsync(Guid categoryId);
+        Task<bool> CategoryExists(Guid categoryId);
     }
 }

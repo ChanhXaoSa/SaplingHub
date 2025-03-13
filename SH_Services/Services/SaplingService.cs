@@ -26,11 +26,7 @@ namespace SH_Services.Services
 
         public async Task<Sapling> CreateAsync(SaplingModel sapling)
         {
-            if (string.IsNullOrEmpty(sapling.Name))
-                throw new ArgumentException("Tên cây không được để trống.");
-            if (sapling.Price < 0)
-                throw new ArgumentException("Giá không được âm.");
-            Sapling newSapling = new Sapling()
+            Sapling newSapling = new()
             {
                 Id = new Guid(),
                 Name = sapling.Name,
@@ -45,10 +41,7 @@ namespace SH_Services.Services
 
         public async Task UpdateAsync(Guid id, SaplingModel sapling)
         {
-            var existingSapling = await _saplingRepository.GetByIdAsync(id);
-            if (existingSapling == null)
-                throw new KeyNotFoundException("Không tìm thấy cây để cập nhật.");
-
+            var existingSapling = await _saplingRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Not found sapling to update.");
             existingSapling.Name = sapling.Name;
             existingSapling.Description = sapling.Description;
             existingSapling.Price = sapling.Price;
@@ -56,16 +49,23 @@ namespace SH_Services.Services
             existingSapling.CategoryId = sapling.CategoryId;
             existingSapling.ImageUrl = sapling.ImageUrl;
 
+            if(!await _saplingRepository.CategoryExists(sapling.CategoryId))
+                throw new KeyNotFoundException("Not found category.");
+
             await _saplingRepository.UpdateAsync(existingSapling);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var sapling = await _saplingRepository.GetByIdAsync(id);
-            if (sapling == null)
-                throw new KeyNotFoundException("Không tìm thấy cây để xóa.");
-
+            _ = await _saplingRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Not found sapling to delete.");
             await _saplingRepository.DeleteAsync(id);
+        }
+
+        public async Task<List<Sapling>> GetByCategoryIdAsync(Guid categoryId)
+        {
+            if(!await _saplingRepository.CategoryExists(categoryId))
+                throw new KeyNotFoundException("Not found category.");
+            return await _saplingRepository.GetByCategoryIdAsync(categoryId);
         }
     }
 }

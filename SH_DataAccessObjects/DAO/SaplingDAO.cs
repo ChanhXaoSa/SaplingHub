@@ -49,6 +49,14 @@ namespace SH_DataAccessObjects.DAO
             }
         }
 
-        
+        public async Task<List<Sapling>> GetByCategoryIdAsync(Guid categoryId)
+        {
+            return await _context.Get<Sapling>().Include(s => s.Category).Where(s => s.CategoryId == categoryId).ToListAsync();
+        }
+
+        public async Task<bool> CategoryExists(Guid categoryId)
+        {
+            return await _context.Get<Category>().AnyAsync(s => s.Id == categoryId);
+        }
     }
 }

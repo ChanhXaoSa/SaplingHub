@@ -39,5 +39,15 @@ namespace SH_Repositories.Repos
         {
             await _saplingDAO.DeleteAsync(id);
         }
+
+        public async Task<List<Sapling>> GetByCategoryIdAsync(Guid categoryId)
+        {
+            return await _saplingDAO.GetByCategoryIdAsync(categoryId);
+        }
+
+        public async Task<bool> CategoryExists(Guid categoryId)
+        {
+            return await _saplingDAO.CategoryExists(categoryId);
+        }
     }
 }
