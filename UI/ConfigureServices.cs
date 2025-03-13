@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SH_BusinessObjects.Common.Interface;
+using SH_BusinessObjects.Identity.Interface;
+using SH_BusinessObjects.Identity;
 using SH_BusinessObjects.Services;
 using SH_DataAccessObjects.Context;
 using SH_DataAccessObjects.Context.Interceptor;
@@ -13,7 +18,9 @@ using SH_Repositories.Repos;
 using SH_Repositories.Repos.Interfaces;
 using SH_Services.Services;
 using SH_Services.Services.Interfaces;
+using System.Reflection;
 using System.Text;
+using Microsoft.Identity.Client;
 
 namespace UI
 {
@@ -66,7 +73,12 @@ namespace UI
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
 
-            services.AddAuthentication(options => options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer("Bearer", options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -79,6 +91,9 @@ namespace UI
                     ValidateLifetime = true,
                 };
             });
+
+            services.AddAuthorizationBuilder()
+                .AddPolicy("CanPurge", policy => policy.RequireRole("Admin"));
 
             services.AddSwaggerGen(options =>
             {
@@ -107,6 +122,36 @@ namespace UI
                     }
                 });
             });
+
+            services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+            services.AddDbContext<SaplingHubContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    builder => builder.MigrationsAssembly(typeof(SaplingHubContext).Assembly.FullName)));
+
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<SaplingHubContext>());
+
+            services.AddScoped<SaplingHubContextInitialiser>();
+
+            services
+                .AddIdentityCore<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<SaplingHubContext>()
+                .AddTokenProvider("SaplingHubApi", typeof(DataProtectorTokenProvider<ApplicationUser>))
+                .AddDefaultTokenProviders()
+                .AddSignInManager();
+
+            services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IIdentityService, IdentityService>();
+
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddMaps(Assembly.GetExecutingAssembly());
+            });
+            services.AddSingleton(mapperConfig.CreateMapper());
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             return services;
         }
     }

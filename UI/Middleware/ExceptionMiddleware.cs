@@ -55,6 +55,26 @@ namespace UI.Middleware
                         Type = nameof(ForbiddenAccessException)
                     };
                     break;
+                case UnauthorizedException unauthorized:
+                    statusCode = HttpStatusCode.Unauthorized;
+                    problem = new CustomProblemDetails
+                    {
+                        Title = unauthorized.Message,
+                        Status = (int)statusCode,
+                        Detail = unauthorized.InnerException?.Message,
+                        Type = nameof(UnauthorizedException)
+                    };
+                    break;
+                case AuthorizationException authz:
+                    statusCode = HttpStatusCode.Forbidden;
+                    problem = new CustomProblemDetails
+                    {
+                        Title = authz.Message,
+                        Status = (int)statusCode,
+                        Detail = authz.InnerException?.Message,
+                        Type = nameof(AuthorizationException)
+                    };
+                    break;
                 default:
                     problem = new CustomProblemDetails
                     {

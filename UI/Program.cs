@@ -11,7 +11,6 @@ using UI.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDataAccessObjectServices(builder.Configuration);
 builder.Services.AddAPIServices(builder.Configuration);
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -58,13 +57,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Before: {context.Request.Path}");
+    await next();
+    Console.WriteLine($"After: {context.Request.Path}");
+});
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

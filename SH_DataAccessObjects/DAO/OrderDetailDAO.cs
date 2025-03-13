@@ -45,5 +45,20 @@ namespace SH_DataAccessObjects.DAO
                 await _context.SaveChangesAsync(CancellationToken.None);
             }
         }
+
+        public async Task<List<OrderDetail>> GetByOrderIdAsync(Guid orderId)
+        {
+            return await _context.Get<OrderDetail>().Where(s => s.OrderId == orderId).ToListAsync();
+        }
+
+        public async Task<bool> OrderExistsAsync(Guid orderId)
+        {
+            return await _context.Get<Order>().AnyAsync(s => s.Id == orderId);
+        }
+
+        public async Task<bool> SaplingExistsAsync(Guid saplingId)
+        {
+            return await _context.Get<Sapling>().AnyAsync(s => s.Id == saplingId);
+        }
     }
 }

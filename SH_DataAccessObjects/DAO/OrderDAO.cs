@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SH_BusinessObjects.Common.Interface;
 using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,16 @@ namespace SH_DataAccessObjects.DAO
                 _context.Get<Order>().Update(order);
                 await _context.SaveChangesAsync(CancellationToken.None);
             }
+        }
+
+        public async Task<List<Order>> GetByUserIdAsync(string userId)
+        {
+            return await _context.Get<Order>().Where(s => s.UserId == userId).ToListAsync();
+        }
+
+        public async Task<bool> UserExistsAsync(string userId)
+        {
+            return await _context.GetUser<ApplicationUser>().AnyAsync(s => s.Id == userId);
         }
     }
 }

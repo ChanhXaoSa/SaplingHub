@@ -42,6 +42,7 @@ namespace UI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("GetAdminAccount")]
         public async Task<IActionResult> GetAdminAccount()
         {

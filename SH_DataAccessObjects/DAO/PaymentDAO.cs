@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SH_BusinessObjects.Common.Interface;
 using SH_BusinessObjects.Entities;
+using SH_BusinessObjects.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,21 @@ namespace SH_DataAccessObjects.DAO
                 _context.Get<Payment>().Update(payment);
                 await _context.SaveChangesAsync(CancellationToken.None);
             }
+        }
+
+        public async Task<List<Payment>> GetByOrderIdAsync(Guid orderId)
+        {
+            return await _context.Get<Payment>().Where(s => s.OrderId == orderId).ToListAsync();
+        }
+
+        public async Task<List<Payment>> GetByPaymentMethodAsync(PaymentMethod paymentMethod)
+        {
+            return await _context.Get<Payment>().Where(s => s.PaymentMethod == paymentMethod).ToListAsync();
+        }
+
+        public async Task<bool> OrderExistsAsync(Guid orderId)
+        {
+            return await _context.Get<Order>().AnyAsync(s => s.Id == orderId);
         }
     }
 }
