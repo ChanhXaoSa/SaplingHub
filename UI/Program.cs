@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SH_BusinessObjects.Identity;
 using SH_DataAccessObjects;
 using SH_DataAccessObjects.Context;
+using SH_Services.Services.Hubs;
 using System.Text.Json.Serialization;
 using UI;
 using UI.Middleware;
@@ -54,6 +55,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapHub<AuctionHub>("/auctionHub");
 
 app.UseMiddleware<ExceptionMiddleware>();
 

@@ -1,7 +1,9 @@
-﻿using RedLockNet.SERedis;
+﻿using Microsoft.AspNetCore.SignalR;
+using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
 using SH_BusinessObjects.Entities;
 using SH_Repositories.Repos.Interfaces;
+using SH_Services.Services.Hubs;
 using SH_Services.Services.Interfaces;
 using StackExchange.Redis;
 using System;
@@ -17,18 +19,27 @@ namespace SH_Services.Services
         private readonly RedLockFactory _redLockFactory;
         private readonly IAuctionBidRepository _auctionBidRepository;
         private readonly IAuctionPlantRepository _auctionPlantRepository;
+        private readonly IHubContext<AuctionHub> _hubContext;
 
-        public AuctionBidService(ConnectionMultiplexer redis, IAuctionBidRepository repository, IAuctionPlantRepository auctionPlantRepository)
+        public AuctionBidService(ConnectionMultiplexer redis, 
+            IAuctionBidRepository repository, 
+            IAuctionPlantRepository auctionPlantRepository,
+            IHubContext<AuctionHub> hubContext)
         {
             var multiplexers = new List<RedLockMultiplexer> { redis };
             _redLockFactory = RedLockFactory.Create(multiplexers);
             _auctionBidRepository = repository;
             _auctionPlantRepository = auctionPlantRepository;
+            _hubContext = hubContext;
         }
 
         public async Task<(bool Success, string Message)> PlaceBidAsync(Guid auctionPlantId, string userId, decimal bidAmount)
         {
             var auctionPlant = await _auctionPlantRepository.GetByIdAsync(auctionPlantId);
+            if (auctionPlant == null)
+            {
+                return (false, "Auction plant not found.");
+            }
             if (bidAmount <= (auctionPlant?.CurrentHighestBid ?? 0))
             {
                 return (false, "Bid amount must be greater than the current bid amount.");
@@ -60,6 +71,17 @@ namespace SH_Services.Services
 
                 await _auctionBidRepository.AddAsync(bid);
                 await _auctionPlantRepository.UpdateCurrentHighestBidAsync(auctionPlantId, bidAmount);
+
+                await _hubContext.Clients.Group(auctionPlantId.ToString())
+                    .SendAsync("ReceiveBidUpdate", new
+                    {
+                        AuctionPlantId = auctionPlantId,
+                        UserId = userId,
+                        BidAmount = bidAmount,
+                        BidTime = DateTime.UtcNow,
+                        IsWinningBid = true,
+                        BidderName = ""
+                    });
 
                 return (true, "Bid placed successfully.");
             }

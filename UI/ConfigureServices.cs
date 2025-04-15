@@ -35,6 +35,7 @@ namespace UI
             var jwtSecretKey = configuration.GetValue<string>("Jwt:Key");
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddSignalR();
 
             services.AddScoped<IApplicationDbContext, SaplingHubContext>();
 
