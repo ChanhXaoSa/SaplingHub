@@ -43,7 +43,7 @@ namespace SH_DataAccessObjects.DAO
                         Quantity = item.Quantity,
                         OrderId = order.Id,
                         UnitPrice = item.Quantity * item.Sapling!.Price,
-                    };
+                    };  
                     await _orderDetailDAO.AddAsync(orderDetail);
                 }
             }

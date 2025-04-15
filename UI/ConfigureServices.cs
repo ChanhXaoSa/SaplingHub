@@ -21,6 +21,8 @@ using SH_Services.Services.Interfaces;
 using System.Reflection;
 using System.Text;
 using Microsoft.Identity.Client;
+using SH_DataAccessObjects.DAO.Interfaces;
+using StackExchange.Redis;
 
 namespace UI
 {
@@ -37,14 +39,16 @@ namespace UI
             services.AddScoped<IApplicationDbContext, SaplingHubContext>();
 
             services.AddScoped<SaplingDAO>();
-            services.AddScoped<CartDAO>();
+            services.AddScoped<ICartDAO, CartDAO>();
             services.AddScoped<CategoryDAO>();
             services.AddScoped<OrderDAO>();
-            services.AddScoped<OrderDetailDAO>();
+            services.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
             services.AddScoped<PaymentDAO>();
             services.AddScoped<UserAccountDAO>();
             services.AddScoped<AdminAccountDAO>();
             services.AddScoped<AccountDAO>();
+            services.AddScoped<IAuctionBidDAO, AuctionBidDAO>();
+            services.AddScoped<IAuctionPlantDAO, AuctionPlantDAO>();
 
             services.AddScoped<ISaplingRepository, SaplingRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
@@ -55,6 +59,8 @@ namespace UI
             services.AddScoped<IUserAccountRepository, UserAccountRepository>();
             services.AddScoped<IAdminAccountRepository, AdminAccountRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAuctionBidRepository, AuctionBidRepository>();
+            services.AddScoped<IAuctionPlantRepository, AuctionPlantRepository>();
 
             services.AddScoped<ISaplingService, SaplingService>();
             services.AddScoped<ICartService, CartService>();
@@ -65,8 +71,15 @@ namespace UI
             services.AddScoped<IUserAccountService, UserAccountService>();
             services.AddScoped<IAdminAccountService, AdminAccountService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAuctionBidService, AuctionBidService>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                var redisConnectionString = configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(redisConnectionString);
+            });
 
             services.AddHttpContextAccessor();
 

@@ -10,7 +10,7 @@ namespace SH_BusinessObjects.Entities
 {
     public class AuctionBid : BaseAuditableEntity
     {
-        public required string BidderName { get; set; }
+        public string? BidderName { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public required string UserId { get; set; }
@@ -19,7 +19,7 @@ namespace SH_BusinessObjects.Entities
         public bool IsWinningBid { get; set; } = false;
 
         [ForeignKey("AuctionPlant")]
-        public int AuctionPlantId { get; set; }
+        public Guid AuctionPlantId { get; set; }
         public AuctionPlant? AuctionPlant { get; set; }
     }
 }
