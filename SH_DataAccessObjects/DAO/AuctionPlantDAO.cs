@@ -19,7 +19,9 @@ namespace SH_DataAccessObjects.DAO
         }
         public async Task<AuctionPlant?> GetByIdAsync(Guid id)
         {
-            return await _context.Get<AuctionPlant>().FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Get<AuctionPlant>()
+                .Include(a => a.AuctionBids)
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
         public async Task AddAsync(AuctionPlant auctionPlant)
         {
@@ -38,8 +40,22 @@ namespace SH_DataAccessObjects.DAO
             {
                 auctionPlant.CurrentHighestBid = currentHighestBid;
                 _context.Get<AuctionPlant>().Update(auctionPlant);
-                await _context.SaveChangesAsync(CancellationToken.None);
             }
+            if(auctionPlant?.AuctionBids != null)
+            {
+                foreach (var bid in auctionPlant.AuctionBids)
+                {
+                    if (bid.BidAmount == currentHighestBid)
+                    {
+                        bid.IsWinningBid = true;
+                    }
+                    else
+                    {
+                        bid.IsWinningBid = false;
+                    }
+                }
+            }
+            await _context.SaveChangesAsync(CancellationToken.None);
         }
         public async Task DeleteAsync(Guid id)
         {

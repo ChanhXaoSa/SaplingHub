@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SH_DataAccessObjects.Context;
 
@@ -11,9 +12,11 @@ using SH_DataAccessObjects.Context;
 namespace SH_DataAccessObjects.Migrations
 {
     [DbContext(typeof(SaplingHubContext))]
-    partial class SaplingHubContextModelSnapshot : ModelSnapshot
+    [Migration("20250416033901_AddWallet")]
+    partial class AddWallet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

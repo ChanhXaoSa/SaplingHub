@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SH_DataAccessObjects.Context;
 
@@ -11,9 +12,11 @@ using SH_DataAccessObjects.Context;
 namespace SH_DataAccessObjects.Migrations
 {
     [DbContext(typeof(SaplingHubContext))]
-    partial class SaplingHubContextModelSnapshot : ModelSnapshot
+    [Migration("20250416032348_AddAuctionFunction")]
+    partial class AddAuctionFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,13 +369,11 @@ namespace SH_DataAccessObjects.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuctionPlantId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AuctionBids");
                 });
@@ -705,101 +706,6 @@ namespace SH_DataAccessObjects.Migrations
                     b.ToTable("UserAccount");
                 });
 
-            modelBuilder.Entity("SH_BusinessObjects.Entities.Wallet", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WalletName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Wallets");
-                });
-
-            modelBuilder.Entity("SH_BusinessObjects.Entities.WalletTransaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("AuctionPlantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TransactionStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("WalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuctionPlantId");
-
-                    b.HasIndex("WalletId");
-
-                    b.ToTable("WalletTransactions");
-                });
-
             modelBuilder.Entity("SH_BusinessObjects.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -941,14 +847,6 @@ namespace SH_DataAccessObjects.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SH_BusinessObjects.Identity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
                     b.Navigation("AuctionPlant");
                 });
 
@@ -1024,34 +922,6 @@ namespace SH_DataAccessObjects.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SH_BusinessObjects.Entities.Wallet", b =>
-                {
-                    b.HasOne("SH_BusinessObjects.Identity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SH_BusinessObjects.Entities.WalletTransaction", b =>
-                {
-                    b.HasOne("SH_BusinessObjects.Entities.AuctionPlant", "AuctionPlant")
-                        .WithMany()
-                        .HasForeignKey("AuctionPlantId");
-
-                    b.HasOne("SH_BusinessObjects.Entities.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AuctionPlant");
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("SH_BusinessObjects.Entities.AuctionPlant", b =>

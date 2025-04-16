@@ -9,20 +9,15 @@ using System.Threading.Tasks;
 
 namespace SH_BusinessObjects.Entities
 {
-    public class AuctionBid : BaseAuditableEntity
+    public class Wallet : BaseAuditableEntity
     {
-        public string? BidderName { get; set; }
-
         [ForeignKey("ApplicationUser")]
         public required string UserId { get; set; }
-        public required decimal BidAmount { get; set; }
-        public DateTime BidTime { get; set; } = DateTime.UtcNow;
-        public bool IsWinningBid { get; set; } = false;
-
-        [ForeignKey("AuctionPlant")]
-        public Guid AuctionPlantId { get; set; }
+        public string? WalletName { get; set; } = "Default Wallet";
+        public double Balance { get; set; } = 0.0;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime LastUpdatedDate { get; set; } = DateTime.Now;
 
         public virtual ApplicationUser? ApplicationUser { get; set; }
-        public virtual AuctionPlant? AuctionPlant { get; set; }
     }
 }

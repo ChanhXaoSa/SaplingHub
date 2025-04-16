@@ -31,6 +31,10 @@ namespace SH_DataAccessObjects.Context
         public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
         public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<AuctionBid> AuctionBids => Set<AuctionBid>();
+        public DbSet<AuctionPlant> AuctionPlants => Set<AuctionPlant>();
+        public DbSet<Wallet> Wallets => Set<Wallet>();
+        public DbSet<WalletTransaction> WalletTransactions => Set<WalletTransaction>();
 
         // seed data function
 
